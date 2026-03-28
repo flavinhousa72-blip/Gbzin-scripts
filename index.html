@@ -1,53 +1,561 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-<title>GBZINHO SCRIPTS</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GBzinho Scripts</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
 <style>
-body {
-    background: #0a0a1a;
-    color: white;
+  :root {
+    --red: #ff2222;
+    --red2: #ff6600;
+    --dark: #0a0a0f;
+    --dark2: #111118;
+    --card: #14141e;
+    --border: #2a2a3a;
+    --text: #e0e0f0;
+    --muted: #6a6a8a;
+    --green: #00ff88;
+    --yellow: #ffd700;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--dark);
+    color: var(--text);
+    font-family: 'Rajdhani', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,34,34,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,34,34,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--red), var(--red2), var(--red), transparent);
+    z-index: 100;
+    animation: scanPulse 2s ease-in-out infinite;
+  }
+  @keyframes scanPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+  }
+  .header {
     text-align: center;
-    font-family: Arial;
-}
-button {
-    padding: 15px;
-    margin: 10px;
-    border-radius: 10px;
-    border: none;
-    background: #0077ff;
-    color: white;
+    padding: 40px 0 30px;
+    animation: fadeDown 0.8s ease;
+  }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .header .tag {
+    display: inline-block;
+    background: rgba(255,34,34,0.15);
+    border: 1px solid rgba(255,34,34,0.4);
+    color: var(--red);
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    padding: 4px 16px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+  .header h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(28px, 7vw, 52px);
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 30%, var(--red) 70%, var(--red2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+    line-height: 1.1;
+    filter: drop-shadow(0 0 30px rgba(255,34,34,0.4));
+  }
+  .header .sub {
+    color: var(--muted);
     font-size: 16px;
-}
+    margin-top: 10px;
+    letter-spacing: 1px;
+  }
+  .lock-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 20px 0 30px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .lock-box::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 50% 0%, rgba(255,34,34,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .lock-icon {
+    font-size: 52px;
+    margin-bottom: 12px;
+    animation: lockPulse 2s ease-in-out infinite;
+  }
+  @keyframes lockPulse {
+    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(255,34,34,0.5)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(255,34,34,0.9)); }
+  }
+  .lock-box h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  .lock-box p {
+    color: var(--muted);
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+  .steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+  .step-dot {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    border: 2px solid var(--border);
+    color: var(--muted);
+    transition: all 0.4s;
+  }
+  .step-dot.active {
+    border-color: var(--red);
+    color: var(--red);
+    background: rgba(255,34,34,0.1);
+    box-shadow: 0 0 12px rgba(255,34,34,0.4);
+  }
+  .step-dot.done {
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0,255,136,0.1);
+    box-shadow: 0 0 12px rgba(0,255,136,0.3);
+  }
+  .step-line {
+    width: 40px; height: 2px;
+    background: var(--border);
+    transition: background 0.4s;
+  }
+  .step-line.done { background: var(--green); }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-red {
+    background: linear-gradient(135deg, var(--red), #cc0000);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(255,34,34,0.4);
+  }
+  .btn-green {
+    background: linear-gradient(135deg, var(--green), #00cc66);
+    color: #000;
+    box-shadow: 0 4px 20px rgba(0,255,136,0.35);
+  }
+  .ad-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .ad-overlay.visible { display: flex; }
+  .ad-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 440px;
+    width: 90%;
+    text-align: center;
+  }
+  .ad-box .ad-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .ad-visual {
+    width: 100%;
+    height: 120px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(255,34,34,0.2);
+    position: relative;
+  }
+  .ad-visual::after {
+    content: 'AD';
+    position: absolute;
+    top: 8px; right: 10px;
+    font-size: 10px;
+    font-family: 'Orbitron', sans-serif;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+  .ad-box h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+  .ad-box p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  .ad-countdown {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--red);
+    margin-bottom: 8px;
+  }
+  .ad-progress {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .ad-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--red2));
+    border-radius: 2px;
+    width: 0%;
+    transition: width 1s linear;
+  }
+  .scripts-section { display: none; }
+  .scripts-section.visible { display: block; }
+  .unlock-badge {
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+  .unlock-badge .badge-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    color: var(--green);
+    letter-spacing: 1px;
+  }
+  .scripts-grid { display: grid; gap: 16px; }
+  .script-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-title { display: flex; align-items: center; gap: 12px; }
+  .card-icon {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .icon-red { background: rgba(255,34,34,0.15); }
+  .icon-blue { background: rgba(0,120,255,0.15); }
+  .icon-orange { background: rgba(255,102,0,0.15); }
+  .icon-purple { background: rgba(140,60,255,0.15); }
+  .card-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .card-tag { font-size: 11px; color: var(--muted); letter-spacing: 1px; margin-top: 2px; }
+  .copy-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255,34,34,0.1);
+    border: 1px solid rgba(255,34,34,0.25);
+    border-radius: 6px;
+    color: var(--red);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn.copied {
+    background: rgba(0,255,136,0.1);
+    border-color: rgba(0,255,136,0.3);
+    color: var(--green);
+  }
+  .card-body { padding: 16px 20px; }
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    color: #a8d8ff;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-all;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+  .footer {
+    text-align: center;
+    padding-top: 40px;
+    color: var(--muted);
+    font-size: 13px;
+    letter-spacing: 1px;
+  }
+  .footer span { color: var(--red); }
 </style>
 </head>
-
 <body>
 
-<h1>🔥 GBZINHO VOCÊ É LOUCO SCRIPTS 🔥</h1>
+<div class="ad-overlay" id="adOverlay">
+  <div class="ad-box">
+    <div class="ad-label">⚡ Assistindo anúncio <span id="adNum">1</span> de 2</div>
+    <div class="ad-visual">📢</div>
+    <h3 id="adTitle">Suporte ao Canal</h3>
+    <p id="adDesc">Aguarde o anúncio terminar para liberar os scripts</p>
+    <div class="ad-countdown" id="adCountdown">60</div>
+    <div class="ad-progress"><div class="ad-progress-fill" id="adFill"></div></div>
+    <button class="btn btn-green" id="adCloseBtn" style="display:none" onclick="closeAd()">✅ Continuar</button>
+  </div>
+</div>
 
-<p id="status">Clique para liberar</p>
+<div class="container">
+  <div class="header">
+    <div class="tag">🎮 Blox Fruits</div>
+    <h1>GBzinho<br>Scripts</h1>
+    <p class="sub">Você é louco — scripts exclusivos do canal</p>
+  </div>
 
-<button onclick="start()">LIBERAR</button>
-<br><br>
+  <div class="lock-box" id="lockBox">
+    <div class="lock-icon">🔒</div>
+    <h2>Scripts Bloqueados</h2>
+    <p>Assista 2 anúncios para desbloquear todos os scripts</p>
+    <div class="steps">
+      <div class="step-dot" id="dot1">1</div>
+      <div class="step-line" id="line1"></div>
+      <div class="step-dot" id="dot2">2</div>
+      <div class="step-line" id="line2"></div>
+      <div class="step-dot" id="dot3">🔓</div>
+    </div>
+    <button class="btn btn-red" id="startBtn" onclick="startUnlock()">📺 Ver Anúncio 1 — Desbloquear</button>
+  </div>
 
-<button id="download" style="display:none;" onclick="go()">DOWNLOAD</button>
+  <div class="scripts-section" id="scriptsSection">
+    <div class="unlock-badge">
+      <div class="badge-text">✅ Scripts Desbloqueados — Copie e cole no executor</div>
+    </div>
+    <div class="scripts-grid">
+
+      <div class="script-card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon icon-red">⚔️</div>
+            <div><div class="card-name">CAC Hub</div><div class="card-tag">Auto Farm · Blox Fruits</div></div>
+          </div>
+          <button class="copy-btn" onclick="copyScript(this,'cac')">📋 Copiar</button>
+        </div>
+        <div class="card-body">
+          <div class="code-block" id="cac">loadstring(game:HttpGet("https://raw.githubusercontent.com/hhl29042008-ops/script/refs/heads/main/cac"))()</div>
+        </div>
+      </div>
+
+      <div class="script-card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon icon-blue">🌙</div>
+            <div><div class="card-name">MeoX Hub</div><div class="card-tag">Auto Farm · Blox Fruits</div></div>
+          </div>
+          <button class="copy-btn" onclick="copyScript(this,'meox')">📋 Copiar</button>
+        </div>
+        <div class="card-body">
+          <div class="code-block" id="meox">loadstring(game:HttpGet("https://raw.githubusercontent.com/VanHoangIOS/MeoXHub/refs/heads/main/Main.lua"))()</div>
+        </div>
+      </div>
+
+      <div class="script-card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon icon-orange">🔴</div>
+            <div><div class="card-name">Redz Hub</div><div class="card-tag">Config + CAC · Pirates · Sea 2</div></div>
+          </div>
+          <button class="copy-btn" onclick="copyScript(this,'redz')">📋 Copiar</button>
+        </div>
+        <div class="card-body">
+          <div class="code-block" id="redz">Config = {
+    Team = "Pirates",
+    Configuration = {
+        HopWhenIdle = true,
+        AutoHop = true,
+        AutoHopDelay = 60 * 60,
+        FpsBoost = false,
+        blackscreen = false
+    },
+    Items = {
+        AutoFullyMelees = true,
+        Saber = true,
+        CursedDualKatana = true,
+        SoulGuitar = true,
+        RaceV2 = true
+    },
+    Settings = {
+        StayInSea2UntilHaveDarkFragments = false
+    }
+}
+loadstring(game:HttpGet("https://raw.githubusercontent.com/hhl29042008-ops/script/refs/heads/main/cac"))()</div>
+        </div>
+      </div>
+
+      <div class="script-card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="card-icon icon-purple">🐉</div>
+            <div><div class="card-name">Dragon Hub</div><div class="card-tag">Auto Farm · BF Version</div></div>
+          </div>
+          <button class="copy-btn" onclick="copyScript(this,'dragon')">📋 Copiar</button>
+        </div>
+        <div class="card-body">
+          <div class="code-block" id="dragon">loadstring(game:HttpGet("https://raw.githubusercontent.com/dragonhubdev/dragonwitheveryone/refs/heads/main/Main-BF.lua"))()</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">Feito para o canal <span>GBzinho</span> • Scripts para uso educacional</div>
+</div>
 
 <script>
-function start(){
-    document.getElementById("status").innerText = "Aguarde 60 segundos...";
-    setTimeout(()=>{
-        document.getElementById("status").innerText = "Quase lá... mais 60s";
-        setTimeout(()=>{
-            document.getElementById("status").innerText = "Liberado!";
-            document.getElementById("download").style.display = "block";
-        },60000);
-    },60000);
-}
-
-function go(){
-    window.location.href = "https://google.com";
-}
+  let adStep = 0, adTimer = null;
+  function startUnlock() { adStep = 1; showAd(1); }
+  function showAd(num) {
+    document.getElementById('adNum').textContent = num;
+    document.getElementById('adTitle').textContent = num===1?'Suporte ao Canal — Anúncio 1/2':'Último Anúncio — Já vai!';
+    document.getElementById('adDesc').textContent = num===1?'Aguarde 60 segundos para continuar':'Mais 60 segundos e os scripts são seus!';
+    document.getElementById('adOverlay').classList.add('visible');
+    document.getElementById('adCloseBtn').style.display='none';
+    let s=60;
+    document.getElementById('adCountdown').textContent=s;
+    document.getElementById('adFill').style.width='0%';
+    clearInterval(adTimer);
+    adTimer=setInterval(()=>{
+      s--;
+      document.getElementById('adCountdown').textContent=s;
+      document.getElementById('adFill').style.width=((60-s)/60*100)+'%';
+      if(s<=0){clearInterval(adTimer);document.getElementById('adCountdown').textContent='✓';document.getElementById('adCloseBtn').style.display='inline-flex';}
+    },1000);
+    if(num===1){document.getElementById('dot1').className='step-dot active';}
+    else{document.getElementById('dot1').className='step-dot done';document.getElementById('dot1').textContent='✓';document.getElementById('line1').className='step-line done';document.getElementById('dot2').className='step-dot active';}
+  }
+  function closeAd(){
+    document.getElementById('adOverlay').classList.remove('visible');
+    if(adStep===1){
+      adStep=2;
+      const btn=document.getElementById('startBtn');
+      btn.textContent='📺 Ver Anúncio 2 — Quase lá!';
+      btn.onclick=()=>showAd(2);
+      document.getElementById('dot1').className='step-dot done';
+      document.getElementById('dot1').textContent='✓';
+      document.getElementById('line1').className='step-line done';
+      document.getElementById('dot2').className='step-dot active';
+    } else if(adStep===2){
+      document.getElementById('dot2').className='step-dot done';
+      document.getElementById('dot2').textContent='✓';
+      document.getElementById('line2').className='step-line done';
+      document.getElementById('dot3').className='step-dot done';
+      document.getElementById('lockBox').style.display='none';
+      document.getElementById('scriptsSection').classList.add('visible');
+    }
+  }
+  function copyScript(btn,id){
+    const text=document.getElementById(id).textContent;
+    navigator.clipboard.writeText(text).then(()=>{
+      btn.textContent='✅ Copiado!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copied');},2000);
+    }).catch(()=>{
+      const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+      btn.textContent='✅ Copiado!';btn.classList.add('copied');
+      setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copied');},2000);
+    });
+  }
 </script>
-
 </body>
-</html>
+    </html>
